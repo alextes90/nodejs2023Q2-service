@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
-import { albumsDB, tracksDB } from 'db';
+import { albumsDB, favoritesDB, tracksDB } from 'db';
 import { randomUUID } from 'crypto';
 
 @Injectable()
@@ -49,6 +49,12 @@ export class AlbumsService {
     const albumIndexInTracks = tracksDB.findIndex(
       (track) => track.albumId === id,
     );
+    const albumIndexInFav = favoritesDB.albums.findIndex(
+      (albId) => albId === id,
+    );
+    if (albumIndexInFav >= 0) {
+      favoritesDB.albums.splice(albumIndexInFav, 1);
+    }
     if (albumIndexInTracks >= 0) {
       tracksDB[albumIndexInTracks].albumId = null;
     }

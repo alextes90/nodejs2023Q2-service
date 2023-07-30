@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { Track } from './entities/track.entity';
-import { tracksDB } from 'db';
+import { favoritesDB, tracksDB } from 'db';
 import { randomUUID } from 'crypto';
 
 @Injectable()
@@ -48,6 +48,12 @@ export class TracksService {
 
   remove(id: string) {
     const trackIndex = this.tracks.findIndex((track) => track.id === id);
+    const trackIndexInFav = favoritesDB.tracks.findIndex(
+      (trackId) => trackId === id,
+    );
+    if (trackIndexInFav >= 0) {
+      favoritesDB.tracks.splice(trackIndexInFav, 1);
+    }
     if (trackIndex >= 0) {
       this.tracks.splice(trackIndex, 1);
     } else return 'no track';
