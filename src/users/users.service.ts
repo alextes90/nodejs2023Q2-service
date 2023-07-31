@@ -5,7 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { randomUUID } from 'crypto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-const returnUserFunc = (newUser: User) => {
+export const returnUserFunc = (newUser: User) => {
   return {
     id: newUser.id,
     login: newUser.login,

@@ -2,12 +2,10 @@ import {
   Controller,
   Get,
   Post,
-  Body,
   Param,
   Delete,
   HttpException,
   HttpStatus,
-  Put,
   HttpCode,
 } from '@nestjs/common';
 import { FavoritesService } from './favorites.service';
