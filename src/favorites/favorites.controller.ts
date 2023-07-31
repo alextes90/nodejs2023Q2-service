@@ -10,16 +10,35 @@ import {
 } from '@nestjs/common';
 import { FavoritesService } from './favorites.service';
 import { validate } from 'uuid';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+} from '@nestjs/swagger';
+import { ReturnRaforite } from './entities/favorite.entity';
 
 @Controller('favs')
 export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
+  @ApiOkResponse({
+    description: 'The favorites records',
+    type: ReturnRaforite,
+  })
   @Get()
   findAll() {
     return this.favoritesService.findAll();
   }
 
+  @ApiCreatedResponse()
+  @ApiBadRequestResponse({
+    description: 'id is not a valid uuid',
+  })
+  @ApiNotFoundResponse({
+    description: 'no such id',
+  })
   @Post('track/:id')
   postTrack(@Param('id') id: string) {
     const isValidUUID = validate(id);
@@ -39,6 +58,13 @@ export class FavoritesController {
     return result;
   }
 
+  @ApiCreatedResponse()
+  @ApiBadRequestResponse({
+    description: 'id is not a valid uuid',
+  })
+  @ApiNotFoundResponse({
+    description: 'no such id',
+  })
   @Post('album/:id')
   postAlbum(@Param('id') id: string) {
     const isValidUUID = validate(id);
@@ -58,6 +84,13 @@ export class FavoritesController {
     return result;
   }
 
+  @ApiCreatedResponse()
+  @ApiBadRequestResponse({
+    description: 'id is not a valid uuid',
+  })
+  @ApiNotFoundResponse({
+    description: 'no such id',
+  })
   @Post('artist/:id')
   postArtist(@Param('id') id: string) {
     const isValidUUID = validate(id);
@@ -77,6 +110,13 @@ export class FavoritesController {
     return result;
   }
 
+  @ApiNoContentResponse()
+  @ApiBadRequestResponse({
+    description: 'id is not a valid uuid',
+  })
+  @ApiNotFoundResponse({
+    description: 'no such id',
+  })
   @Delete('track/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   deleteTrack(@Param('id') id: string) {
@@ -94,6 +134,13 @@ export class FavoritesController {
     return result;
   }
 
+  @ApiNoContentResponse()
+  @ApiBadRequestResponse({
+    description: 'id is not a valid uuid',
+  })
+  @ApiNotFoundResponse({
+    description: 'no such id',
+  })
   @Delete('album/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   deleteAlbum(@Param('id') id: string) {
@@ -111,6 +158,13 @@ export class FavoritesController {
     return result;
   }
 
+  @ApiNoContentResponse()
+  @ApiBadRequestResponse({
+    description: 'id is not a valid uuid',
+  })
+  @ApiNotFoundResponse({
+    description: 'no such id',
+  })
   @Delete('artist/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   deleteArtist(@Param('id') id: string) {

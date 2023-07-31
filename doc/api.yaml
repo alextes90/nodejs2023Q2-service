@@ -380,7 +380,11 @@ paths:
       parameters: []
       responses:
         '200':
-          description: ''
+          description: The favorites records
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/ReturnRaforite'
   '/favs/track/{id}':
     post:
       operationId: FavoritesController_postTrack
@@ -393,6 +397,10 @@ paths:
       responses:
         '201':
           description: ''
+        '400':
+          description: id is not a valid uuid
+        '404':
+          description: no such id
     delete:
       operationId: FavoritesController_deleteTrack
       parameters:
@@ -404,6 +412,10 @@ paths:
       responses:
         '204':
           description: ''
+        '400':
+          description: id is not a valid uuid
+        '404':
+          description: no such id
   '/favs/album/{id}':
     post:
       operationId: FavoritesController_postAlbum
@@ -416,6 +428,10 @@ paths:
       responses:
         '201':
           description: ''
+        '400':
+          description: id is not a valid uuid
+        '404':
+          description: no such id
     delete:
       operationId: FavoritesController_deleteAlbum
       parameters:
@@ -427,6 +443,10 @@ paths:
       responses:
         '204':
           description: ''
+        '400':
+          description: id is not a valid uuid
+        '404':
+          description: no such id
   '/favs/artist/{id}':
     post:
       operationId: FavoritesController_postArtist
@@ -439,6 +459,10 @@ paths:
       responses:
         '201':
           description: ''
+        '400':
+          description: id is not a valid uuid
+        '404':
+          description: no such id
     delete:
       operationId: FavoritesController_deleteArtist
       parameters:
@@ -450,6 +474,10 @@ paths:
       responses:
         '204':
           description: ''
+        '400':
+          description: id is not a valid uuid
+        '404':
+          description: no such id
 info:
   title: Home_Library_1
   description: Home_Library_application
@@ -673,3 +701,22 @@ components:
       required:
         - name
         - grammy
+    ReturnRaforite:
+      type: object
+      properties:
+        artist:
+          type: array
+          items:
+            '$ref': '#/components/schemas/Artist'
+        albums:
+          type: array
+          items:
+            '$ref': '#/components/schemas/Album'
+        tracks:
+          type: array
+          items:
+            '$ref': '#/components/schemas/Track'
+      required:
+        - artist
+        - albums
+        - tracks
