@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  # node:
+  #   build: .
+  #   restart: always
+  #   ports:
+  #     - 3000:3000
+  #   depends_on:
+  #     - postgres
+  #   environment:
+  #     DB_PASSWORD: pass123
+  postgres:
+    build: ./db
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
