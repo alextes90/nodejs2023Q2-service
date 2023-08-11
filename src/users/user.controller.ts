@@ -49,7 +49,7 @@ export class UserController {
     description: 'no such id',
   })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     const isValidUUID = validate(id);
     if (!isValidUUID) {
       throw new HttpException(
@@ -57,7 +57,7 @@ export class UserController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const result = this.userService.findOne(id);
+    const result = await this.userService.findOne(id);
     if (result === 'no user') {
       throw new HttpException(`Id - is not found`, HttpStatus.NOT_FOUND);
     }
@@ -90,7 +90,7 @@ export class UserController {
     description: 'invalid old password',
   })
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     const isValidUUID = validate(id);
     if (!isValidUUID) {
       throw new HttpException(
@@ -98,7 +98,7 @@ export class UserController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const result = this.userService.update(id, updateUserDto);
+    const result = await this.userService.update(id, updateUserDto);
     if (result === 'no user') {
       throw new HttpException(`Id - is not found`, HttpStatus.NOT_FOUND);
     }
@@ -119,7 +119,7 @@ export class UserController {
   })
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param('id') id: string) {
+  async delete(@Param('id') id: string) {
     const isValidUUID = validate(id);
     if (!isValidUUID) {
       throw new HttpException(
@@ -127,7 +127,7 @@ export class UserController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const result = this.userService.remove(id);
+    const result = await this.userService.remove(id);
     if (result === 'no user') {
       throw new HttpException(`Id - is not found`, HttpStatus.NOT_FOUND);
     }

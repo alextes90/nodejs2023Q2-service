@@ -40,7 +40,7 @@ export class FavoritesController {
     description: 'no such id',
   })
   @Post('track/:id')
-  postTrack(@Param('id') id: string) {
+  async postTrack(@Param('id') id: string) {
     const isValidUUID = validate(id);
     if (!isValidUUID) {
       throw new HttpException(
@@ -48,7 +48,7 @@ export class FavoritesController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const result = this.favoritesService.postTrack(id);
+    const result = await this.favoritesService.postTrack(id);
     if (result === 'no such track id') {
       throw new HttpException(
         'no such track id',
@@ -66,7 +66,7 @@ export class FavoritesController {
     description: 'no such id',
   })
   @Post('album/:id')
-  postAlbum(@Param('id') id: string) {
+  async postAlbum(@Param('id') id: string) {
     const isValidUUID = validate(id);
     if (!isValidUUID) {
       throw new HttpException(
@@ -74,7 +74,7 @@ export class FavoritesController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const result = this.favoritesService.postAlbum(id);
+    const result = await this.favoritesService.postAlbum(id);
     if (result === 'no such album id') {
       throw new HttpException(
         'no such album id',
@@ -92,7 +92,7 @@ export class FavoritesController {
     description: 'no such id',
   })
   @Post('artist/:id')
-  postArtist(@Param('id') id: string) {
+  async postArtist(@Param('id') id: string) {
     const isValidUUID = validate(id);
     if (!isValidUUID) {
       throw new HttpException(
@@ -100,7 +100,7 @@ export class FavoritesController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const result = this.favoritesService.postArtist(id);
+    const result = await this.favoritesService.postArtist(id);
     if (result === 'no such artist id') {
       throw new HttpException(
         'no such artist id',
@@ -119,7 +119,7 @@ export class FavoritesController {
   })
   @Delete('track/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteTrack(@Param('id') id: string) {
+  async deleteTrack(@Param('id') id: string) {
     const isValidUUID = validate(id);
     if (!isValidUUID) {
       throw new HttpException(
@@ -127,7 +127,7 @@ export class FavoritesController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const result = this.favoritesService.deleteTrack(id);
+    const result = await this.favoritesService.deleteTrack(id);
     if (result === 'no track') {
       throw new HttpException('no track', HttpStatus.NOT_FOUND);
     }
@@ -143,7 +143,7 @@ export class FavoritesController {
   })
   @Delete('album/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteAlbum(@Param('id') id: string) {
+  async deleteAlbum(@Param('id') id: string) {
     const isValidUUID = validate(id);
     if (!isValidUUID) {
       throw new HttpException(
@@ -151,7 +151,7 @@ export class FavoritesController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const result = this.favoritesService.deleteAlbums(id);
+    const result = await this.favoritesService.deleteAlbums(id);
     if (result === 'no album') {
       throw new HttpException('no album', HttpStatus.NOT_FOUND);
     }
@@ -167,7 +167,7 @@ export class FavoritesController {
   })
   @Delete('artist/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteArtist(@Param('id') id: string) {
+  async deleteArtist(@Param('id') id: string) {
     const isValidUUID = validate(id);
     if (!isValidUUID) {
       throw new HttpException(
@@ -175,7 +175,7 @@ export class FavoritesController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const result = this.favoritesService.deleteArtist(id);
+    const result = await this.favoritesService.deleteArtist(id);
     if (result === 'no artist') {
       throw new HttpException('no artist', HttpStatus.NOT_FOUND);
     }

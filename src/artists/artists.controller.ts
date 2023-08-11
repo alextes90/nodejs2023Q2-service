@@ -48,7 +48,7 @@ export class ArtistsController {
     description: 'no such id',
   })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     const isValidUUID = validate(id);
     if (!isValidUUID) {
       throw new HttpException(
@@ -56,7 +56,7 @@ export class ArtistsController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const result = this.artistsService.findOne(id);
+    const result = await this.artistsService.findOne(id);
     if (result === 'no artist') {
       throw new HttpException(`Id - is not found`, HttpStatus.NOT_FOUND);
     }
@@ -84,7 +84,10 @@ export class ArtistsController {
     description: 'id is not a valid uuid',
   })
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateArtistDto: UpdateArtistDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateArtistDto: UpdateArtistDto,
+  ) {
     const isValidUUID = validate(id);
     if (!isValidUUID) {
       throw new HttpException(
@@ -92,7 +95,7 @@ export class ArtistsController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const result = this.artistsService.update(id, updateArtistDto);
+    const result = await this.artistsService.update(id, updateArtistDto);
     if (result === 'no artist') {
       throw new HttpException(`Id - is not found`, HttpStatus.NOT_FOUND);
     }
@@ -110,7 +113,7 @@ export class ArtistsController {
   })
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     const isValidUUID = validate(id);
     if (!isValidUUID) {
       throw new HttpException(
@@ -118,7 +121,7 @@ export class ArtistsController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const result = this.artistsService.remove(id);
+    const result = await this.artistsService.remove(id);
     if (result === 'no artist') {
       throw new HttpException(`Id - is not found`, HttpStatus.NOT_FOUND);
     }

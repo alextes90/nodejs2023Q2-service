@@ -2,19 +2,22 @@ import { Injectable } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { Track } from './entities/track.entity';
-import { favoritesDB, tracksDB } from 'db';
-import { randomUUID } from 'crypto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class TracksService {
-  private tracks: Track[] = tracksDB;
+  constructor(
+    @InjectRepository(Track)
+    private tracksRepository: Repository<Track>,
+  ) {}
 
   findAll() {
-    return this.tracks;
+    return this.tracksRepository.find();
   }
 
-  findOne(id: string) {
-    const track = this.tracks.find((track) => track.id === id);
+  async findOne(id: string) {
+    const track = await this.tracksRepository.findOneBy({ id });
 
     if (!track) {
       return 'no track';
@@ -23,39 +26,27 @@ export class TracksService {
     return track;
   }
 
-  create(createTrackDto: CreateTrackDto) {
-    const newTrack = {
-      id: randomUUID(),
-      name: createTrackDto.name,
-      artistId: createTrackDto.artistId,
-      albumId: createTrackDto.albumId,
-      duration: createTrackDto.duration,
-    };
-    this.tracks.push(newTrack);
-    return newTrack;
+  async create(createTrackDto: CreateTrackDto) {
+    const track = this.tracksRepository.create({
+      ...createTrackDto,
+      isFavorite: false,
+    });
+    const result = await this.tracksRepository.save(track);
+    return result;
   }
 
-  update(id: string, updateTrackDto: UpdateTrackDto) {
-    const trackIndex = this.tracks.findIndex((track) => track.id === id);
-    if (trackIndex >= 0) {
-      this.tracks[trackIndex].name = updateTrackDto.name;
-      this.tracks[trackIndex].albumId = updateTrackDto.albumId;
-      this.tracks[trackIndex].duration = updateTrackDto.duration;
-      this.tracks[trackIndex].artistId = updateTrackDto.artistId;
-      return this.tracks[trackIndex];
-    } else return 'no track';
+  async update(id: string, updateTrackDto: UpdateTrackDto) {
+    const track = await this.tracksRepository.findOneBy({
+      id,
+    });
+    if (!track) return 'no track';
+    const result = { id, isFavorite: track.isFavorite, ...updateTrackDto };
+    return await this.tracksRepository.save(result);
   }
 
-  remove(id: string) {
-    const trackIndex = this.tracks.findIndex((track) => track.id === id);
-    const trackIndexInFav = favoritesDB.tracks.findIndex(
-      (trackId) => trackId === id,
-    );
-    if (trackIndexInFav >= 0) {
-      favoritesDB.tracks.splice(trackIndexInFav, 1);
-    }
-    if (trackIndex >= 0) {
-      this.tracks.splice(trackIndex, 1);
-    } else return 'no track';
+  async remove(id: string) {
+    const track = await this.tracksRepository.findOneBy({ id });
+    if (!track) return 'no track';
+    return await this.tracksRepository.delete(id);
   }
 }

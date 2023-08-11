@@ -48,7 +48,7 @@ export class TracksController {
     description: 'no such id',
   })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     const isValidUUID = validate(id);
     if (!isValidUUID) {
       throw new HttpException(
@@ -56,7 +56,7 @@ export class TracksController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const result = this.tracksService.findOne(id);
+    const result = await this.tracksService.findOne(id);
     if (result === 'no track') {
       throw new HttpException(`Id - is not found`, HttpStatus.NOT_FOUND);
     }
@@ -85,7 +85,10 @@ export class TracksController {
     description: 'id is not a valid uuid',
   })
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateTrackDto: UpdateTrackDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateTrackDto: UpdateTrackDto,
+  ) {
     const isValidUUID = validate(id);
     if (!isValidUUID) {
       throw new HttpException(
@@ -93,7 +96,7 @@ export class TracksController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const result = this.tracksService.update(id, updateTrackDto);
+    const result = await this.tracksService.update(id, updateTrackDto);
     if (result === 'no track') {
       throw new HttpException(`Id - is not found`, HttpStatus.NOT_FOUND);
     }
@@ -111,7 +114,7 @@ export class TracksController {
   })
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     const isValidUUID = validate(id);
     if (!isValidUUID) {
       throw new HttpException(
@@ -119,7 +122,7 @@ export class TracksController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const result = this.tracksService.remove(id);
+    const result = await this.tracksService.remove(id);
     if (result === 'no track') {
       throw new HttpException(`Id - is not found`, HttpStatus.NOT_FOUND);
     }

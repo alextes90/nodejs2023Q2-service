@@ -2,19 +2,22 @@ import { Injectable } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { Artist } from './entities/artist.entity';
-import { albumsDB, artistsDB, favoritesDB, tracksDB } from 'db';
-import { randomUUID } from 'crypto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ArtistsService {
-  private artists: Artist[] = artistsDB;
+  constructor(
+    @InjectRepository(Artist)
+    private artistsRepository: Repository<Artist>,
+  ) {}
 
   findAll() {
-    return this.artists;
+    return this.artistsRepository.find();
   }
 
-  findOne(id: string) {
-    const artist = this.artists.find((artist) => artist.id === id);
+  async findOne(id: string) {
+    const artist = await this.artistsRepository.findOneBy({ id });
 
     if (!artist) {
       return 'no artist';
@@ -23,48 +26,28 @@ export class ArtistsService {
     return artist;
   }
 
-  create(createArtistDto: CreateArtistDto) {
-    const newArtist = {
-      id: randomUUID(),
-      name: createArtistDto.name,
-      grammy: createArtistDto.grammy,
-    };
-    this.artists.push(newArtist);
-    return newArtist;
+  async create(createArtistDto: CreateArtistDto) {
+    const artist = this.artistsRepository.create({
+      ...createArtistDto,
+      isFavorite: false,
+    });
+    const result = await this.artistsRepository.save(artist);
+    return result;
   }
 
-  update(id: string, updateArtistDto: UpdateArtistDto) {
-    const artistIndex = this.artists.findIndex((artist) => artist.id === id);
-    if (artistIndex >= 0) {
-      this.artists[artistIndex].name = updateArtistDto.name;
-      this.artists[artistIndex].grammy = updateArtistDto.grammy;
-      return this.artists[artistIndex];
-    } else return 'no artist';
+  async update(id: string, updateArtistDto: UpdateArtistDto) {
+    const artist = await this.artistsRepository.findOneBy({
+      id,
+    });
+    if (!artist) return 'no artist';
+    const result = { id, isFavorite: artist.isFavorite, ...updateArtistDto };
+    return await this.artistsRepository.save(result);
   }
 
-  remove(id: string) {
-    const artistIndex = this.artists.findIndex((artist) => artist.id === id);
-    const artistIndexInTracks = tracksDB.findIndex(
-      (track) => track.artistId === id,
-    );
-    const artistIndexInAlbums = albumsDB.findIndex(
-      (album) => album.artistId === id,
-    );
-    const artistIndexInFav = favoritesDB.artists.findIndex(
-      (artId) => artId === id,
-    );
-    if (artistIndexInFav >= 0) {
-      favoritesDB.artists.splice(artistIndexInFav, 1);
-    }
-    if (artistIndexInAlbums >= 0) {
-      albumsDB[artistIndexInAlbums].artistId = null;
-    }
-
-    if (artistIndexInTracks >= 0) {
-      tracksDB[artistIndexInTracks].artistId = null;
-    }
-    if (artistIndex >= 0) {
-      this.artists.splice(artistIndex, 1);
+  async remove(id: string) {
+    const artist = await this.artistsRepository.findOneBy({ id });
+    if (artist) {
+      return await this.artistsRepository.delete(id);
     } else return 'no artist';
   }
 }
