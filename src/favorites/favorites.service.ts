@@ -59,8 +59,6 @@ export class FavoritesService {
       id,
     });
     if (!result) return 'no such track id';
-    // result.isFavorite = true;
-    // this.tracksRepository.save(result);
     await this.tracksRepository.update(id, { isFavorite: true });
     return returnEntity(result);
   }
@@ -70,21 +68,13 @@ export class FavoritesService {
       id,
     });
     if (!result) return 'no such artist id';
-    // result.isFavorite = true;
-    // this.artistsRepository.save(result);
     await this.artistsRepository.update(id, { isFavorite: true });
-    const result2 = await this.artistsRepository.findOneBy({
-      id,
-    });
-    console.log(result2);
     return returnEntity(result);
   }
 
   async postAlbum(id: string) {
     const result = await this.albumsRepository.findOne({ where: { id } });
     if (!result) return 'no such album id';
-    // result.isFavorite = true;
-    // this.albumsRepository.save(result);
     await this.albumsRepository.update(id, { isFavorite: true });
     return returnEntity(result);
   }
@@ -94,8 +84,6 @@ export class FavoritesService {
       id,
     });
     if (!result) return 'no track';
-    // result.isFavorite = false;
-    // this.tracksRepository.save(result);
     await this.tracksRepository.update(id, { isFavorite: false });
     return undefined;
   }
@@ -105,8 +93,6 @@ export class FavoritesService {
       id,
     });
     if (!result) return 'no artist';
-    // result.isFavorite = false;
-    // this.artistsRepository.save(result);
     await this.artistsRepository.update(id, { isFavorite: false });
     return undefined;
   }
@@ -116,8 +102,6 @@ export class FavoritesService {
       id,
     });
     if (!result) return 'no album';
-    // result.isFavorite = false;
-    // this.albumsRepository.save(result);
     await this.albumsRepository.update(id, { isFavorite: false });
     return undefined;
   }
