@@ -17,10 +17,34 @@ git clone {repository URL}
 npm install
 ```
 
+## Change .env.example => .env
+
 ## Running application
 
 ```
-npm start
+docker-compose up -d
+```
+
+## Running test
+
+```
+npm run test
+```
+
+## For vulnerabilities scanning
+
+```
+docker:node
+```
+
+```
+docker:db
+```
+
+## REST API documentation (swagger)
+
+```
+http://localhost:4000/doc/
 ```
 
 After starting the app on port (4000 as default) you can open
