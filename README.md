@@ -22,7 +22,23 @@ npm install
 ## Running application
 
 ```
-npm start
+docker-compose up -d
+```
+
+## Running test
+
+```
+npm run test
+```
+
+## For vulnerabilities scanning
+
+```
+docker:node
+```
+
+```
+docker:db
 ```
 
 ## REST API documentation (swagger)
