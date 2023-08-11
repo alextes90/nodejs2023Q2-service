@@ -7,7 +7,7 @@ import { AlbumsModule } from './albums/albums.module';
 import { ArtistsModule } from './artists/artists.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { dataSourceOptions } from 'db/datasource';
+import { dataSourceOptions } from 'src/datasource';
 
 @Module({
   imports: [
