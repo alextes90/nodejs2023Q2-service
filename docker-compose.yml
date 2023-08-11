@@ -1,15 +1,24 @@
 version: '3'
 
 services:
-  # node:
-  #   build: .
-  #   restart: always
-  #   ports:
-  #     - 3000:3000
-  #   depends_on:
-  #     - postgres
-  #   environment:
-  #     DB_PASSWORD: pass123
+  node:
+    build: .
+    restart: on-failure
+    env_file:
+      - .env
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - postgres
+    environment:
+      DB_PASSWORD: pass123
+    # volumes:
+    #   - ./src:/app/src
+    volumes:
+      - .:/app
+      - node-modules:/usr/app/node_modules
+    networks:
+      - default
   postgres:
     build: ./db
     restart: always
@@ -19,3 +28,18 @@ services:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - default
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_logs:/var/log/postgresql
+    command: postgres -c logging_collector=on -c log_destination=stderr -c log_directory=/logs
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  postgres_logs:
+  app:
+  node-modules:
