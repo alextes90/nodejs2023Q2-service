@@ -6,15 +6,15 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
-  host: 'host.docker.internal',
-  port: Number(process.env.POSTGRES_PORT) || 5432,
-  username: process.env.POSRTGRES_USERNAME || 'postgres',
+  host: process.env.POSTGRES_HOST || 'postgres',
+  port: parseInt(process.env.POSTGRES_PORT || '5432'),
+  username: process.env.POSTGRES_USERNAME || 'postgres',
   password: process.env.POSTGRES_PASSWORD || '1234567',
-  database: 'postgres',
+  database: process.env.POSTGRES_DB || 'postgres',
   synchronize: true,
   entities: [User, Album, Track, Artist],
-  // entities: ['dist/**/*.entity.js'],
   // migrations: ['dist/db/migrations/*.js'],
+  // migrationsRun: true,
 };
 
 const dataSource = new DataSource(dataSourceOptions);

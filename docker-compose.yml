@@ -3,7 +3,7 @@ version: '3'
 services:
   node:
     build: .
-    restart: on-failure
+    restart: always
     env_file:
       - .env
     ports:
@@ -28,6 +28,7 @@ services:
       - default
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - postgres_logs:/var/log/postgresql
     command:
       ['postgres', '-c', 'logging_collector=on', '-c', 'log_statement=all']
 
@@ -37,3 +38,4 @@ networks:
 
 volumes:
   postgres_data:
+  postgres_logs:
