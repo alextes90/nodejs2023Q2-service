@@ -32,25 +32,45 @@ export class FavoritesService {
   ) {}
 
   async findAll() {
-    const favArtists = await this.artistsRepository.find({
+    // const favArtists = await this.artistsRepository.find({
+    //   where: {
+    //     isFavorite: true,
+    //   },
+    // });
+    // const favAlbums = await this.albumsRepository.find({
+    //   where: {
+    //     isFavorite: true,
+    //   },
+    // });
+    // const favTracks = await this.tracksRepository.find({
+    //   where: {
+    //     isFavorite: true,
+    //   },
+    // });
+    const favArtistsPromise = this.artistsRepository.find({
       where: {
         isFavorite: true,
       },
     });
-    const favAlbums = await this.albumsRepository.find({
+    const favAlbumsPromise = this.albumsRepository.find({
       where: {
         isFavorite: true,
       },
     });
-    const favTracks = await this.tracksRepository.find({
+    const favTracksPromise = this.tracksRepository.find({
       where: {
         isFavorite: true,
       },
     });
+    const result = await Promise.all([
+      favArtistsPromise,
+      favAlbumsPromise,
+      favTracksPromise,
+    ]);
     return {
-      artists: favArtists.map((i) => returnEntity(i)),
-      albums: favAlbums.map((i) => returnEntity(i)),
-      tracks: favTracks.map((i) => returnEntity(i)),
+      artists: result[0].map((i) => returnEntity(i)),
+      albums: result[1].map((i) => returnEntity(i)),
+      tracks: result[2].map((i) => returnEntity(i)),
     };
   }
 
