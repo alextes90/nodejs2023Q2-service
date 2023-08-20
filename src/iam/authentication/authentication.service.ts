@@ -12,6 +12,7 @@ import { Repository } from 'typeorm';
 import jwtConfig from '../config/jwt.config';
 import { HashingService } from '../hashing/hashing.service';
 import { LoginDto } from './dto/login.dto';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 
 @Injectable()
@@ -57,16 +58,46 @@ export class AuthenticationService {
     if (!isEqual) {
       throw new ForbiddenException('No such user or password');
     }
-    const accessToken = await this.jwtService.signAsync(
+    return await this.generateTokens(user);
+  }
+
+  async generateTokens(user: User) {
+    const [accessToken, refreshToken] = await Promise.all([
+      this.signToken<Partial<User>>(
+        user.id,
+        this.jwtConfiguration.accessTokenTtl,
+        { login: user.login },
+      ),
+      this.signToken(user.id, this.jwtConfiguration.refreshTokenTtl),
+    ]);
+    return { accessToken, refreshToken };
+  }
+
+  async refreshToken(refreshTokenDto: RefreshTokenDto) {
+    try {
+      const { sub } = await this.jwtService.verifyAsync(
+        refreshTokenDto.refreshToken,
+        { secret: this.jwtConfiguration.secret },
+      );
+      const user = await this.userRepository.findOneByOrFail({
+        id: sub,
+      });
+      return this.generateTokens(user);
+    } catch (err) {
+      throw new ForbiddenException();
+    }
+  }
+
+  private async signToken<T>(userId: string, expiresIn: number, payload?: T) {
+    return await this.jwtService.signAsync(
       {
-        sub: user.id,
-        login: user.login,
+        sub: userId,
+        ...payload,
       },
       {
         secret: this.jwtConfiguration.secret,
-        expiresIn: this.jwtConfiguration.accessTokenTtl,
+        expiresIn,
       },
     );
-    return { accessToken };
   }
 }
