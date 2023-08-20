@@ -28,18 +28,10 @@ docker-compose up -d
 ## Running test
 
 ```
-npm run test
+npm run test:auth
 ```
 
-## For vulnerabilities scanning
-
-```
-docker:node
-```
-
-```
-docker:db
-```
+## TO SEE LOGING GO TO dis/src/logger/logginFile
 
 ## REST API documentation (swagger)
 
