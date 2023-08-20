@@ -31,7 +31,7 @@ docker-compose up -d
 npm run test:auth
 ```
 
-## TO SEE LOGING GO TO dis/src/logger/logginFile
+## TO SEE LOGING GO TO dist/src/logger/logginFile
 
 ## REST API documentation (swagger)
 

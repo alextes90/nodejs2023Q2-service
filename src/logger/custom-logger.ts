@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { LoggerService } from '@nestjs/common';
 import { appendFile, stat, readdir } from 'node:fs/promises';
 import * as path from 'path';
