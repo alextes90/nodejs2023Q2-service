@@ -19,10 +19,16 @@ npm install
 
 ## Change .env.example => .env
 
-## Running application
+## Running docker
 
 ```
 docker-compose up -d
+```
+
+## Running app (folder dist should appear) if not then npm run build => npm run start
+
+```
+npm run start:dev
 ```
 
 ## Running test
@@ -31,7 +37,9 @@ docker-compose up -d
 npm run test:auth
 ```
 
-## TO SEE LOGING GO TO dist/src/logger/logginFile
+## TO SEE LOGING GO TO dist/src/logger/logginFile!!!
+
+## 'unhandledRejection' and 'uncaughtException' in main.ts
 
 ## REST API documentation (swagger)
 
