@@ -10,7 +10,8 @@ import { User } from './users/entities/user.entity';
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
-  host: process.env.POSTGRES_HOST || 'postgres',
+  // host: process.env.POSTGRES_HOST || 'postgres',
+  host: 'localhost',
   port: parseInt(process.env.POSTGRES_PORT || '5432'),
   username: process.env.POSTGRES_USERNAME || 'postgres',
   password: process.env.POSTGRES_PASSWORD || '1234567',

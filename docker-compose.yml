@@ -1,19 +1,19 @@
 version: '3'
 
 services:
-  node:
-    build: .
-    restart: always
-    env_file:
-      - .env
-    ports:
-      - ${PORT}:${PORT}
-    depends_on:
-      - postgres
-    volumes:
-      - ./src:/app/src
-    networks:
-      - default
+  # node:
+  #   build: .
+  #   restart: always
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - ${PORT}:${PORT}
+  #   depends_on:
+  #     - postgres
+  #   volumes:
+  #     - ./src:/app/src
+  #   networks:
+  #     - default
 
   postgres:
     build: ./db
@@ -24,18 +24,17 @@ services:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    networks:
-      - default
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - postgres_logs:/var/log/postgresql
-    command:
-      ['postgres', '-c', 'logging_collector=on', '-c', 'log_statement=all']
+    # networks:
+    #   - default
+    # volumes:
+    #   - postgres_data:/var/lib/postgresql/data
+    #   - postgres_logs:/var/log/postgresql
+    # command:
+    #   ['postgres', '-c', 'logging_collector=on', '-c', 'log_statement=all']
+# networks:
+#   default:
+#     driver: bridge
 
-networks:
-  default:
-    driver: bridge
-
-volumes:
-  postgres_data:
-  postgres_logs:
+# volumes:
+#   postgres_data:
+#   postgres_logs:

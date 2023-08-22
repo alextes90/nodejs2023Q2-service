@@ -22,6 +22,8 @@ const getTokenAndUserId = async (request) => {
     .set('Accept', 'application/json')
     .send(createUserDto);
 
+  console.log(accessToken);
+
   if (mockUserId === undefined || accessToken === undefined) {
     throw new Error('Authorization is not implemented');
   }
